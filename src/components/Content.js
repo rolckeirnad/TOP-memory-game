@@ -2,12 +2,12 @@ import React from "react";
 import Card from "./Card";
 import './Content.css';
 
-function Content() {
+function Content({ characters }) {
   return (
     <div className='App__content'>
       <div className='Content__grid'>
-        {Array(12).fill("").map((character, index) => {
-          return <Card />
+        {characters.map((character) => {
+          return <Card character={character} />
         })}
       </div>
     </div>

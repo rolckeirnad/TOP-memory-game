@@ -1,11 +1,11 @@
 import React from "react";
 import './Card.css';
 
-function Card() {
+function Card({ character }) {
   return (
-    <div className="Card">
-      <img className="Card__image" src="https://placekitten.com/g/300/300" alt="card" />
-      <div className="Card__name">Name</div>
+    <div className="Card" key={character.id}>
+      <img className="Card__image" src={character.image} alt="card" />
+      <div className="Card__name">{character.name}</div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import './App.css';
 import headerLogo from './assets/images/rick-and-morty-logo-font-free-download.jpg'
 import Content from './components/Content';
@@ -24,10 +25,27 @@ function Footer() {
 }
 
 function App() {
+  const [characters, setCharacters] = useState([])
+
+  useEffect(() => {
+    // Temporal array to fetch some characters
+    const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    const fetchCharacters = async () => {
+      try {
+        const response = await fetch('https://rickandmortyapi.com/api/character/' + ids)
+        const data = await response.json()
+        setCharacters(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchCharacters()
+  }, [])
+
   return (
     <div className="App">
       <Header />
-      <Content />
+      <Content characters={characters} />
       <Footer />
     </div>
   );
