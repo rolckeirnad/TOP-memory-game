@@ -31,6 +31,9 @@
 .App__content {
   flex: 1;
   background-color: #6a799c;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .App__footer {

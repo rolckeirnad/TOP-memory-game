@@ -1,5 +1,6 @@
 import './App.css';
 import headerLogo from './assets/images/rick-and-morty-logo-font-free-download.jpg'
+import Content from './components/Content';
 
 function Header() {
   return (
@@ -17,7 +18,7 @@ function Header() {
 function Footer() {
   return (
     <div className='App__footer'>
-        <a className='App__footer__link' href="https://github.com/rolckeirnad/TOP-memory-game">GitHub</a>
+      <a className='App__footer__link' href="https://github.com/rolckeirnad/TOP-memory-game">GitHub</a>
     </div>
   );
 }
@@ -26,11 +27,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div className='App__content'>
-        <div className='Content__grid'>
-          Here we'll display the cards
-        </div>
-      </div>
+      <Content />
       <Footer />
     </div>
   );
