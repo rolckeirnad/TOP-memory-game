@@ -3,14 +3,14 @@ import './App.css';
 import headerLogo from './assets/images/rick-and-morty-logo-font-free-download.jpg'
 import Content from './components/Content';
 
-function Header() {
+function Header({ counter }) {
   return (
     <div className='App__header'>
       <img className='App__header__logo' src={headerLogo} alt="Rick and Morty logo" />
       <h1 className='App__header__title'>Memory Card</h1>
       <div className='App__header__score'>
-        <p>Best Score: 0</p>
-        <p>Score: 0</p>
+        <p>Best Score: {counter.max}</p>
+        <p>Score: {counter.actual}</p>
       </div>
     </div>
   );
@@ -26,7 +26,7 @@ function Footer() {
 
 function App() {
   const [characters, setCharacters] = useState([])
-  const [ids, setIds] = useState([])
+  const [counter, setCounter] = useState({ actual: 0, max: 0 })
 
   useEffect(() => {
     const getRandomIds = (n = 24, max = 826) => {
@@ -50,12 +50,11 @@ function App() {
 
     const randomIds = getRandomIds()
     fetchCharacters()
-    setIds(randomIds)
   }, [])
 
   return (
     <div className="App">
-      <Header />
+      <Header counter={counter} />
       <Content characters={characters} />
       <Footer />
     </div>
