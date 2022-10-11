@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&display=swap');
+
+@font-face {
+  font-family: "Get Schwifty";
+  src: url('./assets/fonts/get_schwifty.ttf') format('truetype');
+}
+
 .App {
   display: flex;
   flex-direction: column;

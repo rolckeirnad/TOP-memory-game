@@ -28,6 +28,7 @@ function App() {
   const [characters, setCharacters] = useState([])
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
   const [clicked, setClicked] = useState([])
+  const noImage = ["19", "104", "189", "249"]
 
   useEffect(() => {
     const getRandomIds = (n = 24, max = 826) => {
