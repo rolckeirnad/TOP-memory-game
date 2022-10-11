@@ -26,20 +26,31 @@ function Footer() {
 
 function App() {
   const [characters, setCharacters] = useState([])
+  const [ids, setIds] = useState([])
 
   useEffect(() => {
-    // Temporal array to fetch some characters
-    const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    const getRandomIds = (n = 24, max = 826) => {
+      let randomArr = []
+      while (randomArr.length < n) {
+        const number = Math.floor(Math.random() * max) + 1
+        if (randomArr.indexOf(number) === -1) randomArr.push(number)
+      }
+      return randomArr
+    }
+
     const fetchCharacters = async () => {
       try {
-        const response = await fetch('https://rickandmortyapi.com/api/character/' + ids)
+        const response = await fetch('https://rickandmortyapi.com/api/character/' + randomIds)
         const data = await response.json()
         setCharacters(data)
       } catch (error) {
         console.error(error)
       }
     }
+
+    const randomIds = getRandomIds()
     fetchCharacters()
+    setIds(randomIds)
   }, [])
 
   return (
