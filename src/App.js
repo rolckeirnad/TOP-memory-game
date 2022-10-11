@@ -27,6 +27,7 @@ function Footer() {
 function App() {
   const [characters, setCharacters] = useState([])
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
+  const [clicked, setClicked] = useState([])
 
   useEffect(() => {
     const getRandomIds = (n = 24, max = 826) => {
@@ -52,10 +53,58 @@ function App() {
     fetchCharacters()
   }, [])
 
+  // Fisher–Yates shuffle method
+  const shuffleCharacters = () => {
+    let shuffledArray = [...characters]
+    var length = shuffledArray.length;
+
+    while (length) {
+      const i = Math.floor(Math.random() * length--);
+      [shuffledArray[length], shuffledArray[i]] = [shuffledArray[i], shuffledArray[length]]
+    }
+    setCharacters(shuffledArray)
+  }
+
+  const incrementCounter = () => {
+    const newActual = counter.actual + 1
+    const newMax = newActual > counter.max ? newActual : counter.max
+    setCounter({
+      actual: newActual,
+      max: newMax
+    })
+  }
+
+  const resetGame = () => {
+    setClicked([])
+    setCounter({ actual: 0, max: counter.max })
+    shuffleCharacters()
+  }
+
+  const addId = (id) => {
+    if (clicked.includes(id) === false) {
+      const newClickedArr = [...clicked, id]
+      setClicked(newClickedArr)
+      return true
+    } else return false
+  }
+
+  const clickHandler = (e) => {
+    const id = e.target.parentElement.id
+    const continueGame = addId(id)
+    if (continueGame) {
+      incrementCounter()
+      shuffleCharacters()
+    } else {
+      // Show Results
+      console.log('End game. Score:', counter.actual)
+      resetGame()
+    }
+  }
+
   return (
     <div className="App">
       <Header counter={counter} />
-      <Content characters={characters} />
+      <Content characters={characters} clickHandler={clickHandler} />
       <Footer />
     </div>
   );
