@@ -4,19 +4,34 @@ import './Content.css';
 import spinnerImg from './../assets/images/spinner.png'
 
 function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
-  const [characters, setCharacters] = useState([...fetchedCharacters])
+  const [characters, setCharacters] = useState([])
   const [spinner, setSpinner] = useState(true)
   const [clicked, setClicked] = useState([])
   const [end, setEnd] = useState(false)
-  const loadedImages = useRef(0)
+  // This ids don't have image
+  const noImage = [19, 104, 189, 249]
 
   useEffect(() => {
-    loadedImages.current = 0
     setSpinner(true)
     setEnd(false)
     setClicked([])
     setCharacters([...fetchedCharacters])
   }, [fetchedCharacters])
+
+  useEffect(() => {
+    const loadImage = (image) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = image;
+        loadImg.onload = () => resolve(image);
+        loadImg.onerror = (err) => reject(err);
+      });
+    }
+
+    Promise.all(characters.map((character) => loadImage(character.image)))
+      .then(() => setSpinner(false))
+      .catch((err) => console.error("Failed to load images", err));
+  }, [characters])
 
   // Fisher–Yates shuffle method
   const shuffleCharacters = () => {
@@ -28,13 +43,6 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
       [shuffledArray[length], shuffledArray[i]] = [shuffledArray[i], shuffledArray[length]]
     }
     setCharacters(shuffledArray)
-  }
-
-  const imageHandler = () => {
-    loadedImages.current += 1
-    if (loadedImages.current >= characters.length) {
-      setSpinner(false)
-    }
   }
 
   const clickHandler = (e) => {
@@ -76,7 +84,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
       }
       <div className='Content__grid' style={{ display: spinner ? "none" : "grid" }}>
         {characters.map((character) => {
-          return <Card character={character} clickHandler={clickHandler} imageHandler={imageHandler} key={`card-${character.id}`} />
+          return <Card character={character} clickHandler={clickHandler} key={`card-${character.id}`} />
         })}
       </div>
     </div>
