@@ -29,10 +29,6 @@ function App() {
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
   const [rounds, setRounds] = useState(0)
 
-/*   useEffect(() => {
-    updateCharacters()
-  }, [])
- */
   useEffect(() => {
     updateCharacters()
   }, [rounds])
@@ -62,16 +58,18 @@ function App() {
   }
 
   const incrementCounter = () => {
-    const newActual = counter.actual + 1
-    const newMax = newActual > counter.max ? newActual : counter.max
     setCounter({
-      actual: newActual,
-      max: newMax
+      ...counter,
+      actual: counter.actual + 1,
     })
   }
 
   const setNewGame = () => {
-    setCounter({ actual: 0, max: counter.max })
+    const newMax = counter.actual > counter.max ? counter.actual : counter.max
+    setCounter({
+      actual: 0,
+      max: newMax
+    })
     setRounds(rounds + 1)
   }
 
