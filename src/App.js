@@ -27,10 +27,17 @@ function Footer() {
 function App() {
   const [characters, setCharacters] = useState([])
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
-  const [clicked, setClicked] = useState([])
-  const noImage = ["19", "104", "189", "249"]
+  const [rounds, setRounds] = useState(0)
 
+/*   useEffect(() => {
+    updateCharacters()
+  }, [])
+ */
   useEffect(() => {
+    updateCharacters()
+  }, [rounds])
+
+  const updateCharacters = () => {
     const getRandomIds = (n = 24, max = 826) => {
       let randomArr = []
       while (randomArr.length < n) {
@@ -52,18 +59,6 @@ function App() {
 
     const randomIds = getRandomIds()
     fetchCharacters()
-  }, [])
-
-  // Fisher–Yates shuffle method
-  const shuffleCharacters = () => {
-    let shuffledArray = [...characters]
-    var length = shuffledArray.length;
-
-    while (length) {
-      const i = Math.floor(Math.random() * length--);
-      [shuffledArray[length], shuffledArray[i]] = [shuffledArray[i], shuffledArray[length]]
-    }
-    setCharacters(shuffledArray)
   }
 
   const incrementCounter = () => {
@@ -75,37 +70,15 @@ function App() {
     })
   }
 
-  const resetGame = () => {
-    setClicked([])
+  const setNewGame = () => {
     setCounter({ actual: 0, max: counter.max })
-    shuffleCharacters()
-  }
-
-  const addId = (id) => {
-    if (clicked.includes(id) === false) {
-      const newClickedArr = [...clicked, id]
-      setClicked(newClickedArr)
-      return true
-    } else return false
-  }
-
-  const clickHandler = (e) => {
-    const id = e.target.parentElement.id
-    const continueGame = addId(id)
-    if (continueGame) {
-      incrementCounter()
-      shuffleCharacters()
-    } else {
-      // Show Results
-      console.log('End game. Score:', counter.actual)
-      resetGame()
-    }
+    setRounds(rounds + 1)
   }
 
   return (
     <div className="App">
       <Header counter={counter} />
-      <Content characters={characters} clickHandler={clickHandler} />
+      <Content fetchedCharacters={characters} incrementCounter={incrementCounter} setNewGame={setNewGame} />
       <Footer />
     </div>
   );

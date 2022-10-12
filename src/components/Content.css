@@ -58,3 +58,16 @@
     transform: rotate(360deg);
   }
 }
+
+.Content__endScreen {
+  margin: -10px 0;
+  padding: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgb(106 121 156 / 80%);
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
