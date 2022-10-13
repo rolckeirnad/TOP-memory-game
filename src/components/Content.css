@@ -61,7 +61,7 @@
 
 .Content__endScreen {
   margin: -10px 0;
-  padding: 20px;
+  padding: 5px;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -70,4 +70,102 @@
   z-index: 1;
   width: 100%;
   height: 100%;
+  font-size: 28px;
+}
+
+.Content__endScreen__selections {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+}
+
+.Content__endScreen__overview {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  padding: 15px 0;
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  grid-auto-columns: 1fr;
+}
+
+.Content__endScreen__card {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  border: 1px solid;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #a3acc2;
+}
+
+.Content__endScreen__card__img {
+  height: 100%;
+  width: auto;
+  border-radius: 10px;
+}
+
+.Content__endScreen__card__name {
+  font-size: 20px;
+  width: 14ch;
+  padding: 0 10px 0 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.Content__endScreen__lastSelection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.Content__endScreen__lastSelection__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 300px;
+  max-width: 250px;
+  background-color: #a3acc2;
+  border-radius: 20px;
+}
+
+.Content__endScreen__lastSelection__container__img {
+  height: 100%;
+  width: auto;
+  max-height: 200px;
+  border: 1px solid black;
+  border-radius: 20px;
+  margin: 10px 0;
+}
+
+.Content__endScreen__lastSelection__container__name {
+  height: 100%;
+  width: auto;
+  max-height: 200px;
+  border-radius: 20px;
+  margin: 10px 0;
+  padding: 0 10px;
+  text-align: center;
+}
+
+.Content__endScreen__lastSelection__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: -10px 0 0 0;
+  padding: 0 16px 4px;
+}
+
+.Content__endScreen__buttons>button {
+  border: none;
+  border-radius: 30px;
+  padding: 8px;
+  background-color: #f9e23f;
+  color: #3f51b5;
+  font-size: 30px;
 }

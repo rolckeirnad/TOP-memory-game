@@ -3,11 +3,12 @@ import Card from "./Card";
 import './Content.css';
 import spinnerImg from './../assets/images/spinner.png'
 
-function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
+function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
   const [characters, setCharacters] = useState([])
   const [spinner, setSpinner] = useState(true)
   const [clicked, setClicked] = useState([])
   const [end, setEnd] = useState(false)
+  const last = useRef(null)
   // This ids don't have image
   const noImage = [19, 104, 189, 249]
 
@@ -52,7 +53,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
       incrementCounter()
       shuffleCharacters()
     } else {
-      endGame()
+      endGame(id)
     }
   }
 
@@ -64,7 +65,10 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
     } else return false
   }
 
-  const endGame = () => {
+  const endGame = (id) => {
+    last.current = characters.find((character) => {
+      return character.id.toString() === id
+    })
     setEnd(true)
   }
 
@@ -76,9 +80,33 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
       </div>
       {end &&
         <div className="Content__endScreen">
-          <p>This will display end game</p>
-          <div className="Content__endScreen__buttons">
-            <button type="button" onClick={setNewGame}>Play again</button>
+          <div className="Content__endScreen__results">
+            <p>Your score was: {counter.actual}</p>
+            {counter.actual > counter.max && <p>You set a new high score!</p>}
+          </div>
+          <div className="Content__endScreen__selections">
+            <div className="Content__endScreen__overview">
+              {clicked.map((id) => characters.find((character) => character.id.toString() === id)
+              ).map((clickedCharacter) => {
+                return (
+                  <div className="Content__endScreen__card" key={`endCard-${clickedCharacter.id}`}>
+                    <img className="Content__endScreen__card__img" src={clickedCharacter.image} alt={clickedCharacter.name} />
+                    <p className="Content__endScreen__card__name">{clickedCharacter.name}</p>
+                  </div>
+                )
+              })
+              }
+            </div>
+            <div className="Content__endScreen__lastSelection">
+              <p>Your last selection:</p>
+              <div className="Content__endScreen__lastSelection__container" >
+                <img className="Content__endScreen__lastSelection__container__img" src={last.current.image} alt={last.current.name} />
+                <p className="Content__endScreen__lastSelection__container__name">{last.current.name}</p>
+              </div>
+              <div className="Content__endScreen__buttons">
+                <button type="button" onClick={setNewGame}>Play again</button>
+              </div>
+            </div>
           </div>
         </div>
       }

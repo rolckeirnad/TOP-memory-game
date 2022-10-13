@@ -76,7 +76,12 @@ function App() {
   return (
     <div className="App">
       <Header counter={counter} />
-      <Content fetchedCharacters={characters} incrementCounter={incrementCounter} setNewGame={setNewGame} />
+      <Content
+        fetchedCharacters={characters}
+        counter={counter}
+        incrementCounter={incrementCounter}
+        setNewGame={setNewGame}
+      />
       <Footer />
     </div>
   );
