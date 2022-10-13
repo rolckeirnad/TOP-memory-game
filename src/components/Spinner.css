@@ -1,0 +1,52 @@
+.Spinner {
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #6a799c;
+}
+
+.Spinner__img {
+  height: 60vh;
+  width: 60vh;
+  object-fit: cover;
+  animation-name: spin;
+  animation-duration: 6000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  position: absolute;
+}
+
+.Spinner__text {
+  color: #13b0c8;
+  z-index: 1;
+  font-weight: bolder;
+  font-size: 80px;
+  font-family: 'Get Schwifty', cursive;
+  text-shadow:
+    0px 3px #cadf5e,
+    0px -3px #cadf5e,
+    3px 0px #cadf5e,
+    -3px 0px #cadf5e,
+    0px -10px 2px black,
+    0px 10px 2px black,
+    -10px 0px 2px black,
+    10px 0px 2px black,
+    6px 6px 2px black,
+    -6px 6px 2px black,
+    -6px -6px 2px black,
+    6px -6px 2px black;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

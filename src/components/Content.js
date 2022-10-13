@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import './Content.css';
-import spinnerImg from './../assets/images/spinner.png'
 
-function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
+function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, toggleSpinner }) {
   const [characters, setCharacters] = useState([])
-  const [spinner, setSpinner] = useState(true)
   const [clicked, setClicked] = useState([])
   const [end, setEnd] = useState(false)
   const last = useRef(null)
@@ -13,7 +11,7 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
   const noImage = [19, 104, 189, 249]
 
   useEffect(() => {
-    setSpinner(true)
+    toggleSpinner(true)
     setEnd(false)
     setClicked([])
     setCharacters([...fetchedCharacters])
@@ -30,9 +28,10 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
     }
 
     Promise.all(characters.map((character) => loadImage(character.image)))
-      .then(() => setSpinner(false))
+      .then(() => toggleSpinner(false))
       .catch((err) => console.error("Failed to load images", err));
   }, [characters])
+
 
   // Fisher–Yates shuffle method
   const shuffleCharacters = () => {
@@ -74,10 +73,6 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
 
   return (
     <div className='App__content'>
-      <div className="Content__spinner" style={{ display: spinner ? "flex" : "none" }}>
-        <img className="Content__spinner__img" src={spinnerImg} alt="loading spinner" />
-        <p className="Content__spinner__text">Loading...</p>
-      </div>
       {end &&
         <div className="Content__endScreen">
           <div className="Content__endScreen__results">
@@ -110,7 +105,7 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
           </div>
         </div>
       }
-      <div className='Content__grid' style={{ display: spinner ? "none" : "grid" }}>
+      <div className='Content__grid' >
         {characters.map((character) => {
           return <Card character={character} clickHandler={clickHandler} key={`card-${character.id}`} />
         })}

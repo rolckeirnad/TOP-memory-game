@@ -3,11 +3,14 @@ import './App.css';
 import Header from './components/Header'
 import Content from './components/Content';
 import Footer from './components/Footer'
+import Spinner from './components/Spinner'
 
 function App() {
   const [characters, setCharacters] = useState([])
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
   const [rounds, setRounds] = useState(0)
+  const [spinner, setSpinner] = useState(true)
+
 
   useEffect(() => {
     updateCharacters()
@@ -53,14 +56,22 @@ function App() {
     setRounds(rounds + 1)
   }
 
+  const toggleSpinner = (state) => {
+    setSpinner(state)
+  }
+
   return (
     <div className="App">
       <Header counter={counter} />
+      {spinner &&
+        <Spinner />
+      }
       <Content
         fetchedCharacters={characters}
         counter={counter}
         incrementCounter={incrementCounter}
         setNewGame={setNewGame}
+        toggleSpinner={toggleSpinner}
       />
       <Footer />
     </div>
