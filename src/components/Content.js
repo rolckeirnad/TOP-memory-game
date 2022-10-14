@@ -8,8 +8,6 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
   const [clicked, setClicked] = useState([])
   const [end, setEnd] = useState(false)
   const last = useRef(null)
-  // This ids don't have image
-  const noImage = [19, 104, 189, 249]
 
   useEffect(() => {
     shuffleCharacters(fetchedCharacters)

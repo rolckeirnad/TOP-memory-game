@@ -38,11 +38,15 @@ function App() {
   }, [data])
 
   const getData = async () => {
+    // This ids don't have image
+    const noImage = ["19", "66", "104", "189", "249"]
     const getRandomIds = (n = 30, max = 826) => {
       let randomArr = []
       while (randomArr.length < n) {
         const number = Math.floor(Math.random() * max) + 1
-        if (randomArr.indexOf(number) === -1) randomArr.push(number)
+        if (randomArr.indexOf(number) === -1 && noImage.includes(number.toString()) === false) {
+          randomArr.push(number)
+        }
       }
       return randomArr
     }
