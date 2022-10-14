@@ -11,6 +11,7 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
 
   useEffect(() => {
     shuffleCharacters(fetchedCharacters)
+    console.log("Effect content...")
   }, [fetchedCharacters])
 
   useEffect(() => {

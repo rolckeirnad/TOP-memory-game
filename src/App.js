@@ -5,9 +5,11 @@ import Content from './components/Content';
 import Footer from './components/Footer'
 import Spinner from './components/Spinner'
 import fetchCharacters from './rickmorty';
+import { useQuery } from '@tanstack/react-query';
 
 function App() {
   const [data, setData] = useState()
+  const [random, setRandom] = useState()
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
   const [rounds, setRounds] = useState(1)
   const [spinner, setSpinner] = useState(true)
@@ -52,8 +54,9 @@ function App() {
     }
 
     const randomIds = getRandomIds()
-    const result = await fetchCharacters(randomIds)
-    setData(result)
+    setRandom(randomIds)
+    /* const result = await fetchCharacters(randomIds)
+    setData(result) */
   }
 
   const incrementCounter = () => {
@@ -69,7 +72,9 @@ function App() {
       actual: 0,
       max: newMax
     })
+    setRandom(null)
     setSpinner(true)
+    setDisplay(false)
     setRounds(1)
     setRetries(retries + 1)
   }
@@ -77,6 +82,15 @@ function App() {
   const toggleSpinner = (state) => {
     setSpinner(state)
   }
+
+  const { isLoading, isSuccess, isError } = useQuery(['plumbus', random], async () => {
+    const result = await fetchCharacters(random)
+    setData(result)
+    return result
+  }, {
+    enabled: !!random,
+    refetchOnWindowFocus: false
+  })
 
   return (
     <div className="App">
