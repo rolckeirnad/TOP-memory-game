@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import './Content.css';
 
-function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, toggleSpinner }) {
-  const [characters, setCharacters] = useState([])
+function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
+  const [characters, setCharacters] = useState()
+  const [loaded, setLoaded] = useState(false)
   const [clicked, setClicked] = useState([])
   const [end, setEnd] = useState(false)
   const last = useRef(null)
@@ -11,31 +12,16 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, tog
   const noImage = [19, 104, 189, 249]
 
   useEffect(() => {
-    toggleSpinner(true)
-    setEnd(false)
-    setClicked([])
-    setCharacters([...fetchedCharacters])
+    shuffleCharacters(fetchedCharacters)
   }, [fetchedCharacters])
 
   useEffect(() => {
-    const loadImage = (image) => {
-      return new Promise((resolve, reject) => {
-        const loadImg = new Image();
-        loadImg.src = image;
-        loadImg.onload = () => resolve(image);
-        loadImg.onerror = (err) => reject(err);
-      });
-    }
-
-    Promise.all(characters.map((character) => loadImage(character.image)))
-      .then(() => toggleSpinner(false))
-      .catch((err) => console.error("Failed to load images", err));
+    setLoaded(true)
   }, [characters])
 
-
   // Fisher–Yates shuffle method
-  const shuffleCharacters = () => {
-    let shuffledArray = [...characters]
+  const shuffleCharacters = (array) => {
+    let shuffledArray = [...array]
     let length = shuffledArray.length;
 
     while (length) {
@@ -47,12 +33,18 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, tog
 
   const clickHandler = (e) => {
     const id = e.target.parentElement.id
+    last.current = characters.find((character) => {
+      return character.id.toString() === id
+    })
     const continueGame = addId(id)
     if (continueGame) {
       incrementCounter()
-      shuffleCharacters()
+      if (clicked.length + 1 >= characters.length) {
+        endGame()
+      }
+      // shuffleCharacters(characters)
     } else {
-      endGame(id)
+      endGame()
     }
   }
 
@@ -64,11 +56,15 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, tog
     } else return false
   }
 
-  const endGame = (id) => {
-    last.current = characters.find((character) => {
-      return character.id.toString() === id
-    })
+  const endGame = () => {
     setEnd(true)
+  }
+
+  const resetGame = () => {
+    setEnd(false)
+    setClicked([])
+    setLoaded(false)
+    setNewGame()
   }
 
   return (
@@ -99,14 +95,15 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame, tog
                 <p className="Content__endScreen__lastSelection__container__name">{last.current.name}</p>
               </div>
               <div className="Content__endScreen__buttons">
-                <button type="button" onClick={setNewGame}>Play again</button>
+                <button type="button" onClick={resetGame}>Play again</button>
               </div>
             </div>
           </div>
         </div>
       }
+      { }
       <div className='Content__grid' >
-        {characters.map((character) => {
+        {loaded && characters.map((character) => {
           return <Card character={character} clickHandler={clickHandler} key={`card-${character.id}`} />
         })}
       </div>

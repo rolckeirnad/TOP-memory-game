@@ -4,20 +4,41 @@ import Header from './components/Header'
 import Content from './components/Content';
 import Footer from './components/Footer'
 import Spinner from './components/Spinner'
+import fetchCharacters from './rickmorty';
 
 function App() {
-  const [characters, setCharacters] = useState([])
+  const [data, setData] = useState()
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
-  const [rounds, setRounds] = useState(0)
+  const [rounds, setRounds] = useState(1)
   const [spinner, setSpinner] = useState(true)
-
+  const [display, setDisplay] = useState(false)
+  const [retries, setRetries] = useState(0)
 
   useEffect(() => {
-    updateCharacters()
-  }, [rounds])
+    getData()
+  }, [retries])
 
-  const updateCharacters = () => {
-    const getRandomIds = (n = 24, max = 826) => {
+  useEffect(() => {
+    const loadImage = (image) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = image;
+        loadImg.onload = () => resolve(image);
+        loadImg.onerror = (err) => reject(err);
+      });
+    }
+
+    data && Promise.all(data.slice(0, 24).map((character) => loadImage(character.image)))
+      .then(() => {
+        setSpinner(false)
+        setDisplay(true)
+      })
+      .catch((err) => console.error("Failed to load images", err));
+
+  }, [data])
+
+  const getData = async () => {
+    const getRandomIds = (n = 30, max = 826) => {
       let randomArr = []
       while (randomArr.length < n) {
         const number = Math.floor(Math.random() * max) + 1
@@ -26,18 +47,9 @@ function App() {
       return randomArr
     }
 
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch('https://rickandmortyapi.com/api/character/' + randomIds)
-        const data = await response.json()
-        setCharacters(data)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
     const randomIds = getRandomIds()
-    fetchCharacters()
+    const result = await fetchCharacters(randomIds)
+    setData(result)
   }
 
   const incrementCounter = () => {
@@ -53,7 +65,9 @@ function App() {
       actual: 0,
       max: newMax
     })
-    setRounds(rounds + 1)
+    setSpinner(true)
+    setRounds(1)
+    setRetries(retries + 1)
   }
 
   const toggleSpinner = (state) => {
@@ -66,13 +80,14 @@ function App() {
       {spinner &&
         <Spinner />
       }
-      <Content
-        fetchedCharacters={characters}
-        counter={counter}
-        incrementCounter={incrementCounter}
-        setNewGame={setNewGame}
-        toggleSpinner={toggleSpinner}
-      />
+      {data && display &&
+        <Content
+          fetchedCharacters={data.slice(0, 24)}
+          counter={counter}
+          incrementCounter={incrementCounter}
+          setNewGame={setNewGame}
+          toggleSpinner={toggleSpinner}
+        />}
       <Footer />
     </div>
   );
