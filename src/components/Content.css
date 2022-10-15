@@ -30,12 +30,39 @@
 }
 
 .Content__endScreen__overview {
+  width: 70%;
+  height: 100%;
   display: grid;
-  grid-auto-flow: column;
-  gap: 10px;
-  padding: 15px 0;
-  grid-template-rows: repeat(6, minmax(0, 1fr));
-  grid-auto-columns: 1fr;
+  padding: 15px 20px;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #5c78d6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262c3a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d389c;
+}
+
+/* Calculated grid */
+.Content__endScreen__overview {
+  --grid-layout-gap: 10px;
+  --grid-column-count: 4;
+  --grid-item--min-width: 200px;
+  --gap-count: calc(var(--grid-column-count) - 1);
+  --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+  --grid-item--max-width: calc((100% - var(--total-gap-width)) / var(--grid-column-count));
+  grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
+  gap: var(--grid-layout-gap);
 }
 
 .Content__endScreen__card {
@@ -46,6 +73,7 @@
   border-radius: 15px;
   overflow: hidden;
   background-color: #a3acc2;
+  box-shadow: 0px 0px 10px -1px black;
 }
 
 .Content__endScreen__card__img {
@@ -71,6 +99,7 @@
   align-items: center;
   height: 100%;
   padding: 30px 0;
+  margin-right: 30px;
 }
 
 .Content__endScreen__lastSelection__container {
@@ -82,6 +111,7 @@
   background-color: #a3acc2;
   border-radius: 20px;
   padding: 10px 20px;
+  box-shadow: 0px 0px 15px 0px black;
 }
 
 .Content__endScreen__lastSelection__container__img {
@@ -98,9 +128,13 @@
   width: auto;
   max-height: 200px;
   border-radius: 20px;
-  margin: 10px 0;
+  margin: -6px 0 0;
   padding: 0 10px;
   text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .Content__endScreen__lastSelection__name {
@@ -132,11 +166,16 @@
   border-radius: 30px;
   padding: 8px;
   font-size: 30px;
+  transition: ease-in 200ms;
 }
 
 .--play-button {
   background-color: #f9e23f;
   color: #3f51b5;
+}
+
+.--play-button:hover {
+  box-shadow: 0px 4px 6px -1px black, inset 0 0px 20px 5px #ada985;
 }
 
 .--next-button {
