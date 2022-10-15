@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import './App.css';
 import Header from './components/Header'
 import Content from './components/Content';
@@ -17,7 +17,7 @@ function App() {
   const [retries, setRetries] = useState(0)
 
   useEffect(() => {
-    getData()
+    setRandomIds()
   }, [retries])
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function App() {
 
   }, [data])
 
-  const getData = async () => {
+  const setRandomIds = () => {
     // This ids don't have image
     const noImage = ["19", "66", "104", "189", "249"]
     const getRandomIds = (n = 30, max = 826) => {
@@ -55,35 +55,33 @@ function App() {
 
     const randomIds = getRandomIds()
     setRandom(randomIds)
-    /* const result = await fetchCharacters(randomIds)
-    setData(result) */
   }
 
-  const incrementCounter = () => {
-    setCounter({
-      ...counter,
-      actual: counter.actual + 1,
-    })
-  }
+  const incrementCounter = useCallback(() => {
+    setCounter(prevCounter => ({
+      ...prevCounter,
+      actual: prevCounter.actual + 1,
+    }))
+  }, [])
 
-  const setNewGame = () => {
-    const newMax = counter.actual > counter.max ? counter.actual : counter.max
-    setCounter({
+  const setNewGame = useCallback(() => {
+    setCounter(prevCounter => ({
       actual: 0,
-      max: newMax
-    })
+      max: prevCounter.actual > prevCounter.max ? prevCounter.actual : prevCounter.max,
+    }))
+    setData(null)
     setRandom(null)
     setSpinner(true)
     setDisplay(false)
     setRounds(1)
-    setRetries(retries + 1)
-  }
+    setRetries(prevRetries => prevRetries + 1)
+  }, [])
 
-  const toggleSpinner = (state) => {
+  const toggleSpinner = useCallback((state) => {
     setSpinner(state)
-  }
+  }, [])
 
-  const { isLoading, isSuccess, isError } = useQuery(['plumbus', random], async () => {
+  useQuery(['plumbus', random], async () => {
     const result = await fetchCharacters(random)
     setData(result)
     return result
@@ -91,6 +89,8 @@ function App() {
     enabled: !!random,
     refetchOnWindowFocus: false
   })
+
+  const cachedCharacters = useMemo(() => data && data.slice(0, 24), [data])
 
   return (
     <div className="App">
@@ -100,8 +100,7 @@ function App() {
       }
       {data && display &&
         <Content
-          fetchedCharacters={data.slice(0, 24)}
-          counter={counter}
+          fetchedCharacters={cachedCharacters}
           incrementCounter={incrementCounter}
           setNewGame={setNewGame}
           toggleSpinner={toggleSpinner}

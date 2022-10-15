@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import './Content.css';
 
-function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
+function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
   const [characters, setCharacters] = useState()
   const [loaded, setLoaded] = useState(false)
   const [clicked, setClicked] = useState([])
@@ -11,7 +11,6 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
 
   useEffect(() => {
     shuffleCharacters(fetchedCharacters)
-    console.log("Effect content...")
   }, [fetchedCharacters])
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
       if (clicked.length + 1 >= characters.length) {
         endGame()
       }
-      // shuffleCharacters(characters)
+      shuffleCharacters(characters)
     } else {
       endGame()
     }
@@ -70,10 +69,6 @@ function Content({ fetchedCharacters, counter, incrementCounter, setNewGame }) {
     <div className='App__content'>
       {end &&
         <div className="Content__endScreen">
-          <div className="Content__endScreen__results">
-            <p>Your score was: {counter.actual}</p>
-            {counter.actual > counter.max && <p>You set a new high score!</p>}
-          </div>
           <div className="Content__endScreen__selections">
             <div className="Content__endScreen__overview">
               {clicked.map((id) => characters.find((character) => character.id.toString() === id)
