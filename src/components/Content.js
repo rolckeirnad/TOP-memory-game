@@ -1,21 +1,44 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import './Content.css';
 
-function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
+function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinner, incrementRound }) {
   const [characters, setCharacters] = useState()
   const [loaded, setLoaded] = useState(false)
   const [clicked, setClicked] = useState([])
+  const [next, setNext] = useState(false)
   const [end, setEnd] = useState(false)
   const last = useRef(null)
 
-  useEffect(() => {
-    shuffleCharacters(fetchedCharacters)
+  const checkNextRound = useCallback((clicks) => {
+    if (clicks.length >= fetchedCharacters.length) {
+      setNext(true)
+    }
   }, [fetchedCharacters])
 
   useEffect(() => {
-    setLoaded(true)
-  }, [characters])
+    checkNextRound(clicked)
+  }, [clicked, checkNextRound])
+
+  useEffect(() => {
+    const loadImage = (image) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = image;
+        loadImg.onload = () => resolve(image);
+        loadImg.onerror = (err) => reject(err);
+      });
+    }
+
+    Promise.all(fetchedCharacters.map((character) => loadImage(character.image)))
+      .then(() => {
+        shuffleCharacters(fetchedCharacters)
+        toggleSpinner(false)
+        setLoaded(true)
+      })
+      .catch((err) => console.error("Failed to load images", err));
+
+  }, [fetchedCharacters, toggleSpinner])
 
   // Fisher–Yates shuffle method
   const shuffleCharacters = (array) => {
@@ -37,9 +60,6 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
     const continueGame = addId(id)
     if (continueGame) {
       incrementCounter()
-      if (clicked.length + 1 >= characters.length) {
-        endGame()
-      }
       shuffleCharacters(characters)
     } else {
       endGame()
@@ -63,6 +83,13 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
     setClicked([])
     setLoaded(false)
     setNewGame()
+  }
+
+  const continueToNextRound = () => {
+    setNext(false)
+    setClicked([])
+    setLoaded(false)
+    incrementRound()
   }
 
   return (
@@ -95,7 +122,16 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
           </div>
         </div>
       }
-      { }
+      {next &&
+        <div className="Content__nextRound">
+          <div className="Content__nextRound__description">
+            <p>Well done! You clicked {clicked.length} cards correctly!</p>
+          </div>
+          <div className="Content__nextRound__buttons">
+            <button className="Content__button --next-button" type="button" onClick={continueToNextRound}>Play next round</button>
+          </div>
+        </div>
+      }
       <div className='Content__grid' >
         {loaded && characters.map((character) => {
           return <Card character={character} clickHandler={clickHandler} key={`card-${character.id}`} />

@@ -13,35 +13,19 @@ function App() {
   const [counter, setCounter] = useState({ actual: 0, max: 0 })
   const [rounds, setRounds] = useState(1)
   const [spinner, setSpinner] = useState(true)
-  const [display, setDisplay] = useState(false)
 
   useEffect(() => {
     setRandomIds()
   }, [])
 
   useEffect(() => {
-    const loadImage = (image) => {
-      return new Promise((resolve, reject) => {
-        const loadImg = new Image();
-        loadImg.src = image;
-        loadImg.onload = () => resolve(image);
-        loadImg.onerror = (err) => reject(err);
-      });
-    }
-
-    data && Promise.all(data.slice(0, 24).map((character) => loadImage(character.image)))
-      .then(() => {
-        setSpinner(false)
-        setDisplay(true)
-      })
-      .catch((err) => console.error("Failed to load images", err));
-
-  }, [data])
+    setSpinner(true)
+  }, [rounds])
 
   const setRandomIds = () => {
     // This ids don't have image
     const noImage = ["19", "66", "104", "189", "249"]
-    const getRandomIds = (n = 30, max = 826) => {
+    const getRandomIds = (n = 96, max = 826) => {
       let randomArr = []
       while (randomArr.length < n) {
         const number = Math.floor(Math.random() * max) + 1
@@ -63,6 +47,10 @@ function App() {
     }))
   }, [])
 
+  const incrementRound = useCallback(() => {
+    setRounds(prevRound => prevRound + 1)
+  }, [])
+
   const setNewGame = useCallback(() => {
     setCounter(prevCounter => ({
       actual: 0,
@@ -71,7 +59,6 @@ function App() {
     setData(null)
     setRandom(null)
     setSpinner(true)
-    setDisplay(false)
     setRounds(1)
     setRandomIds()
   }, [])
@@ -89,7 +76,7 @@ function App() {
     refetchOnWindowFocus: false
   })
 
-  const cachedCharacters = useMemo(() => data && data.slice(0, 24), [data])
+  const cachedCharacters = useMemo(() => data && data.slice(0, rounds * 8), [data, rounds])
 
   return (
     <div className="App">
@@ -97,12 +84,13 @@ function App() {
       {spinner &&
         <Spinner />
       }
-      {data && display &&
+      {data &&
         <Content
           fetchedCharacters={cachedCharacters}
           incrementCounter={incrementCounter}
           setNewGame={setNewGame}
           toggleSpinner={toggleSpinner}
+          incrementRound={incrementRound}
         />}
       <Footer />
     </div>

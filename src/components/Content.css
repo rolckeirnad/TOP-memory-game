@@ -5,11 +5,11 @@
   gap: 10px;
   align-content: center;
   justify-content: center;
+  padding: 7px 0;
 }
 
 .Content__endScreen,
 .Content__nextRound {
-  margin: -10px 0;
   padding: 5px;
   position: absolute;
   display: flex;
@@ -70,6 +70,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100%;
+  padding: 30px 0;
 }
 
 .Content__endScreen__lastSelection__container {
@@ -80,6 +81,7 @@
   max-width: 250px;
   background-color: #a3acc2;
   border-radius: 20px;
+  padding: 10px 20px;
 }
 
 .Content__endScreen__lastSelection__container__img {
@@ -110,11 +112,39 @@
   padding: 0 16px 4px;
 }
 
-.Content__endScreen__buttons>button {
+.Content__nextRound {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 50px;
+  margin: 0;
+  padding: 90px 0;
+}
+
+.Content__nextRound__description {
+  font-size: 40px;
+  color: #1ac6ff;
+  text-shadow: 0 0 3px black;
+}
+
+.Content__button {
   border: none;
   border-radius: 30px;
   padding: 8px;
+  font-size: 30px;
+}
+
+.--play-button {
   background-color: #f9e23f;
   color: #3f51b5;
-  font-size: 30px;
+}
+
+.--next-button {
+  background-color: #3f51b5;
+  color: #ffffff;
+  transition: ease-in 200ms;
+}
+
+.--next-button:hover {
+  box-shadow: 0px 4px 6px -1px black, inset 0 0px 20px 5px #03b9fffa;
 }
