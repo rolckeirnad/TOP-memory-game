@@ -76,7 +76,10 @@ function App() {
     refetchOnWindowFocus: false
   })
 
-  const cachedCharacters = useMemo(() => data && data.slice(0, rounds * 8), [data, rounds])
+  const cachedCharacters = useMemo(() => {
+    const number = rounds < 13 ? (rounds * 8) : 96
+    return data && data.slice(0, number)
+  }, [data, rounds])
 
   return (
     <div className="App">
