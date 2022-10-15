@@ -89,7 +89,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame }) {
                 <p className="Content__endScreen__lastSelection__container__name">{last.current.name}</p>
               </div>
               <div className="Content__endScreen__buttons">
-                <button type="button" onClick={resetGame}>Play again</button>
+                <button className="Content__button --play-button" type="button" onClick={resetGame}>Play again</button>
               </div>
             </div>
           </div>
