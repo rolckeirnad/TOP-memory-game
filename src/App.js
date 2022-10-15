@@ -14,11 +14,10 @@ function App() {
   const [rounds, setRounds] = useState(1)
   const [spinner, setSpinner] = useState(true)
   const [display, setDisplay] = useState(false)
-  const [retries, setRetries] = useState(0)
 
   useEffect(() => {
     setRandomIds()
-  }, [retries])
+  }, [])
 
   useEffect(() => {
     const loadImage = (image) => {
@@ -74,7 +73,7 @@ function App() {
     setSpinner(true)
     setDisplay(false)
     setRounds(1)
-    setRetries(prevRetries => prevRetries + 1)
+    setRandomIds()
   }, [])
 
   const toggleSpinner = useCallback((state) => {
