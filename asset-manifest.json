@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/TOP-memory-game/static/css/main.5a7c3292.css",
+    "main.js": "/TOP-memory-game/static/js/main.bfe2b0cf.js",
+    "static/media/spinner.png": "/TOP-memory-game/static/media/spinner.5e5081a62e48e3cf0b64.png",
+    "static/media/logo.jpg": "/TOP-memory-game/static/media/logo.aec92d63b0ac0ca0d2e0.jpg",
+    "static/media/get_schwifty.ttf": "/TOP-memory-game/static/media/get_schwifty.c3d1dfc692e3547fed16.ttf",
+    "index.html": "/TOP-memory-game/index.html",
+    "main.5a7c3292.css.map": "/TOP-memory-game/static/css/main.5a7c3292.css.map",
+    "main.bfe2b0cf.js.map": "/TOP-memory-game/static/js/main.bfe2b0cf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a7c3292.css",
+    "static/js/main.bfe2b0cf.js"
+  ]
+}
