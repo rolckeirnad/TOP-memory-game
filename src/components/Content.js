@@ -4,6 +4,9 @@ import './Content.css';
 
 function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinner, incrementRound }) {
   const [characters, setCharacters] = useState()
+  const scroll = useRef(0)
+  const appContent = useRef(null)
+  const contentGrid = useRef(null)
   const [loaded, setLoaded] = useState(false)
   const [clicked, setClicked] = useState([])
   const [next, setNext] = useState(false)
@@ -40,6 +43,10 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinne
 
   }, [fetchedCharacters, toggleSpinner])
 
+  useEffect(() => {
+    appContent.current.scrollTo(0, scroll.current)
+  }, [characters])
+
   // Fisher–Yates shuffle method
   const shuffleCharacters = (array) => {
     let shuffledArray = [...array]
@@ -54,6 +61,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinne
 
   const clickHandler = (e) => {
     const id = e.target.parentElement.id
+    scroll.current = Math.abs(contentGrid.current.getBoundingClientRect().y) + Math.abs(appContent.current.getBoundingClientRect().y)
     last.current = characters.find((character) => {
       return character.id.toString() === id
     })
@@ -82,6 +90,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinne
     setEnd(false)
     setClicked([])
     setLoaded(false)
+    scroll.current = 0
     setNewGame()
   }
 
@@ -89,11 +98,12 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinne
     setNext(false)
     setClicked([])
     setLoaded(false)
+    scroll.current = 0
     incrementRound()
   }
 
   return (
-    <div className='App__content'>
+    <div className='App__content' ref={appContent} >
       {end &&
         <div className="Content__endScreen">
           <div className="Content__endScreen__selections">
@@ -132,7 +142,7 @@ function Content({ fetchedCharacters, incrementCounter, setNewGame, toggleSpinne
           </div>
         </div>
       }
-      <div className='Content__grid' >
+      <div className='Content__grid' ref={contentGrid} >
         {loaded && characters.map((character) => {
           return <Card character={character} clickHandler={clickHandler} key={`card-${character.id}`} />
         })}
